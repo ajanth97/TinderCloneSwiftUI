@@ -6,59 +6,27 @@
 //
 
 import Foundation
-
-import Firebase
-import FirebaseFirestore
-import FirebaseFirestoreSwift
 import SwiftUI
 
 class HomeViewModel: NSObject, ObservableObject {
     
-    @Published var userProfiles: [ProfileCardModel] = []
-    @Published private (set) var lastMatchProfile: ProfileCardModel? = nil
+    override init(){
+        super.init()
+        self.userProfiles.shuffle()
+    }
+    
+    @Published var userProfiles: [ProfileCardModel] = [
+        ProfileCardModel(userId: "1", name: "Nozomi", age: 25, pictures: [UIImage(imageLiteralResourceName: "1"),]),
+        ProfileCardModel(userId: "2", name: "Hikari", age: 22, pictures: [UIImage(imageLiteralResourceName: "2"),]),
+        ProfileCardModel(userId: "3", name: "Ayaka", age: 23, pictures: [UIImage(imageLiteralResourceName: "3"),]),
+        ProfileCardModel(userId: "4", name: "Moe", age: 26, pictures: [UIImage(imageLiteralResourceName: "4"),]),
+        ProfileCardModel(userId: "5", name: "Aya", age: 19, pictures: [UIImage(imageLiteralResourceName: "5"),]),
+        ProfileCardModel(userId: "6", name: "Miyu", age: 24, pictures: [UIImage(imageLiteralResourceName: "6"),]),
+    ]
 
-    @Published private (set) var isFirstFetching: Bool = true
-    @Published private (set) var error: String? = nil
-    @Published private (set) var isLoading: Bool = true
-
-    private let profileCardRepository = ProfileCardRepository.shared
     
     func swipeUser(user: ProfileCardModel, hasLiked: Bool) {
-        Task{
-            do{
-                let isMatch = try await profileCardRepository.swipeUser(swipedUserId: user.userId, hasLiked: hasLiked)
-                if(isMatch){
-                    DispatchQueue.main.async {
-                        self.lastMatchProfile = user
-                    }
-                }
-            }catch{
-                DispatchQueue.main.async {
-                    self.error = error.localizedDescription
-                }
-            }
-        }
+        print("Swiped on \(user) and Liked : \(hasLiked)")
     }
     
-    func fetchProfiles(){
-        self.isLoading = true
-        self.error = nil
-        Task{
-            do {
-                
-                let profileCards = try await profileCardRepository.getProfiles()
-
-                DispatchQueue.main.async{
-                    self.isFirstFetching = false
-                    self.userProfiles = profileCards
-                    self.isLoading = false
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    self.error = error.localizedDescription
-                    self.isLoading = false
-                }
-            }
-        }
-    }
 }
