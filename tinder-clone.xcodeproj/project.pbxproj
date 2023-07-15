@@ -10,6 +10,7 @@
 		05EE02932A56C21A00E7FD77 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EE02922A56C21A00E7FD77 /* ContentView.swift */; };
 		05EE02952A56DE2000E7FD77 /* ARController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EE02942A56DE2000E7FD77 /* ARController.swift */; };
 		05EE02972A56E12E00E7FD77 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EE02962A56E12E00E7FD77 /* CameraView.swift */; };
+		05F32C022A6103790045D4DA /* SwiftCSVExport in Frameworks */ = {isa = PBXBuildFile; productRef = 05F32C012A6103790045D4DA /* SwiftCSVExport */; };
 		4F08993E2780939B00A3BE95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F08993D2780939B00A3BE95 /* Assets.xcassets */; };
 		4F0899412780939B00A3BE95 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F0899402780939B00A3BE95 /* Preview Assets.xcassets */; };
 		4F08994B2780939B00A3BE95 /* tinder_cloneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F08994A2780939B00A3BE95 /* tinder_cloneTests.swift */; };
@@ -152,6 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05F32C022A6103790045D4DA /* SwiftCSVExport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +402,7 @@
 			);
 			name = "tinder-clone";
 			packageProductDependencies = (
+				05F32C012A6103790045D4DA /* SwiftCSVExport */,
 			);
 			productName = "tinder-clone";
 			productReference = 4F0899362780939A00A3BE95 /* Tinder Clone.app */;
@@ -475,6 +478,7 @@
 			);
 			mainGroup = 4F08992D2780939A00A3BE95;
 			packageReferences = (
+				05F32C002A6103790045D4DA /* XCRemoteSwiftPackageReference "SwiftCSVExport" */,
 			);
 			productRefGroup = 4F0899372780939A00A3BE95 /* Products */;
 			projectDirPath = "";
@@ -747,6 +751,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "tinder-clone/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Tinder Clone";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to use this app feature.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -779,6 +785,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "tinder-clone/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Tinder Clone";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to use this app feature.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -935,6 +943,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		05F32C002A6103790045D4DA /* XCRemoteSwiftPackageReference "SwiftCSVExport" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vigneshuvi/SwiftCSVExport.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		05F32C012A6103790045D4DA /* SwiftCSVExport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05F32C002A6103790045D4DA /* XCRemoteSwiftPackageReference "SwiftCSVExport" */;
+			productName = SwiftCSVExport;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4F08992E2780939A00A3BE95 /* Project object */;
 }

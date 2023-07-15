@@ -6,14 +6,19 @@
 //
 
 import SwiftUI
+import SwiftCSVExport
+
+extension CSV : ObservableObject{
+    
+}
 
 struct ContentView: View {
     @StateObject private var arcontroller = ARController()
+    @StateObject private var writeCSV = CSV()
     
     var body: some View {
         NavigationView{
-            HomeView().environmentObject(arcontroller)
+            HomeView().environmentObject(arcontroller).environmentObject(writeCSV)
         }
     }
 }
-

@@ -9,7 +9,5 @@ import UIKit
 
 struct ProfileCardModel {
     let userId: String
-    let name: String
-    let age: Int
     let pictures: [UIImage]
 }

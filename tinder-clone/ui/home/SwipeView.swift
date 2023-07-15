@@ -2,18 +2,24 @@
 //  SwipeView.swift
 //  tinder-clone
 //
-//  Created by Alejandro Piguave on 1/1/22.
 //
 
 import SwiftUI
+import os
+import SwiftCSVExport
+
 
 enum SwipeAction{
     case swipeLeft, swipeRight, doNothing
 }
 
+let hasLikedField = "hasLiked"
+
 struct SwipeView: View {
     @Binding var profiles: [ProfileCardModel]
     @State var swipeAction: SwipeAction = .doNothing
+    @EnvironmentObject var writeCSV:CSV
+    @EnvironmentObject var arcontroller: ARController
     //Bool: true if it was a like (swipe to the right
     var onSwiped: (ProfileCardModel, Bool) -> ()
     
@@ -26,8 +32,10 @@ struct SwipeView: View {
                     ForEach(profiles.indices, id: \.self){ index  in
                         let model: ProfileCardModel = profiles[index]
                         
+                        
                         if(index == profiles.count - 1){
                             SwipeableCardView(model: model, swipeAction: $swipeAction, onSwiped: performSwipe)
+                            
                         } else if(index == profiles.count - 2){
                             SwipeCardView(model: model)
                         }
@@ -42,6 +50,14 @@ struct SwipeView: View {
                 GradientOutlineButton(action: {swipeAction = .swipeRight}, iconName: "heart", colors: AppColor.likeColors)
                 Spacer()
             }.padding(.bottom)
+        }
+        .onAppear{
+            if let headers = arcontroller.blendShapes?.map({return $0.key}) {
+                var fields = headers as! NSArray
+                fields = fields.adding(hasLikedField) as NSArray
+                writeCSV.fields = fields
+                writeCSV.rows = NSArray()
+            }
         }
     }
     
@@ -67,6 +83,9 @@ struct SwipeableCardView: View {
     let model: ProfileCardModel
     @State private var dragOffset = CGSize.zero
     @Binding var swipeAction: SwipeAction
+    @EnvironmentObject var arcontroller: ARController
+    @EnvironmentObject var writeCSV:CSV
+    let swipeLogger = Logger()
     
     var onSwiped: (ProfileCardModel, Bool) -> ()
     
@@ -87,7 +106,7 @@ struct SwipeableCardView: View {
                                                    startPoint: .topLeading,
                                                    endPoint: .bottomTrailing), lineWidth: 4)
                     ).rotationEffect(.degrees(30)).opacity(getDislikeOpacity())
-
+                    
                 }.padding(.top, 45).padding(.leading, 20).padding(.trailing, 20)
                 ,alignment: .top)
             .offset(x: self.dragOffset.width,y: self.dragOffset.height)
@@ -96,13 +115,21 @@ struct SwipeableCardView: View {
                 self.dragOffset = value.translation
             }.onEnded{ value in
                 performDragEnd(value.translation)
-                print("onEnd: \(value.location)")
+                //print("onEnd: \(value.location)")
             }).onChange(of: swipeAction, perform: { newValue in
                 if newValue != .doNothing {
                     performSwipe(newValue)
                 }
                 
             })
+            .onAppear {
+                //self.swipeLogger.debug("Displaying profile...")
+                //let blendShapesArr = arcontroller.blendShapes?.map{return $0.key}
+                let row = arcontroller.blendShapes
+                writeCSV.rows = writeCSV.rows.adding(row) as NSArray
+                //print(writeCSV.rows)
+                
+            }
     }
     
     private func performSwipe(_ swipeAction: SwipeAction){
@@ -184,6 +211,7 @@ struct SwipeCardView: View {
     @State private var currentImageIndex: Int = 0
     
     var body: some View {
+        
         ZStack(alignment: .bottom){
             GeometryReader{ geometry in
                 Image(uiImage: model.pictures[currentImageIndex])
@@ -195,7 +223,7 @@ struct SwipeCardView: View {
                             } else { showNextPicture()}
                         }
                     }))
-            }
+                }
             
             VStack{
                 if(model.pictures.count > 1){
@@ -207,12 +235,11 @@ struct SwipeCardView: View {
                     .padding(.top, 6)
                     .padding(.leading)
                     .padding(.trailing)
+                   
                 }
                 Spacer()
                 VStack{
                     HStack(alignment: .firstTextBaseline){
-                        Text(model.name).font(.largeTitle).fontWeight(.semibold)
-                        Text("\(model.age)").font(.title).fontWeight(.medium)
                         Spacer()
                     }
                 }
@@ -227,8 +254,8 @@ struct SwipeCardView: View {
         .background(.white)
         .cornerRadius(10)
         .shadow(radius: 10)
+
     }
-    
     
     private func showNextPicture(){
         if currentImageIndex < model.pictures.count - 1 {
@@ -240,16 +267,5 @@ struct SwipeCardView: View {
         if currentImageIndex > 0 {
             currentImageIndex -= 1
         }
-    }
-}
-
-
-struct SwipeView_Previews: PreviewProvider {
-    @State static private var profiles: [ProfileCardModel] = [
-        ProfileCardModel(userId: "defdwsfewfes", name: "Michael Jackson", age: 50, pictures: [UIImage(named: "elon_musk")!,UIImage(named: "jeff_bezos")!,UIImage(named: "elon_musk")!,UIImage(named: "jeff_bezos")!,UIImage(named: "elon_musk")!,UIImage(named: "jeff_bezos")!,UIImage(named: "elon_musk")!,UIImage(named: "jeff_bezos")!]),
-        ProfileCardModel(userId: "defdwsfewfes", name: "Michael Jackson", age: 50, pictures: [UIImage(named: "elon_musk")!,UIImage(named: "jeff_bezos")!,UIImage(named: "elon_musk")!,UIImage(named: "jeff_bezos")!,UIImage(named: "elon_musk")!,UIImage(named: "jeff_bezos")!,UIImage(named: "elon_musk")!,UIImage(named: "jeff_bezos")!])
-    ]
-    static var previews: some View {
-        SwipeView(profiles: $profiles, onSwiped: {_,_ in})
     }
 }

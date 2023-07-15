@@ -82,7 +82,9 @@ extension ARController: ARSCNViewDelegate{
         
         self.blendShapes = faceAnchor.blendShapes
         
+        
         //Printing blend shape values
+        /*
         let eyeBlinkLeft = faceAnchor.blendShapes[.eyeBlinkLeft]
         let eyeBlinkRight = faceAnchor.blendShapes[.eyeBlinkRight]
         let eyeLookUpLeft = faceAnchor.blendShapes[.eyeLookUpLeft]
@@ -96,7 +98,7 @@ extension ARController: ARSCNViewDelegate{
         let eyeSquintLeft = faceAnchor.blendShapes[.eyeSquintLeft]
         let eyeSquintRight = faceAnchor.blendShapes[.eyeSquintRight]
         let eyeWideLeft = faceAnchor.blendShapes[.eyeWideLeft]
-        
+        */
         
         //self.faceLogger.debug("Eye Blink left : \(eyeBlinkLeft)")
         
